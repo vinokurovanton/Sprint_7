@@ -3,31 +3,29 @@ import io.restassured.response.ValidatableResponse;
 import json.Courier;
 import json.CourierGenerator;
 import json.Credentials;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import steps.CourierAssertions;
 import steps.CourierClient;
 
 public class CourierTest {
-    private static CourierClient client = new CourierClient();
-    private static CourierAssertions checks = new CourierAssertions();
-    private static CourierGenerator courierGenerator = new CourierGenerator();
-    private static Courier tempCourier;
-    private static Credentials tempCredentials;
-    private static int tempCourierId;
+    private CourierClient client = new CourierClient();
+    private CourierAssertions checks = new CourierAssertions();
+    private CourierGenerator courierGenerator = new CourierGenerator();
+    private Courier tempCourier;
+    private Credentials tempCredentials;
+    private int tempCourierId;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         if (tempCourierId == 0) {
             tempCourier = courierGenerator.getRandomCourier();
-            client.create(tempCourier);
+            client.createCourier(tempCourier);
             tempCredentials = Credentials.from(tempCourier);
         }
     }
 
-    @AfterClass
-    public static void tearDown() {
+    @After
+    public void tearDown() {
         if (tempCourierId == 0) {
             client.delete(tempCourierId);
         }
@@ -38,14 +36,14 @@ public class CourierTest {
     public void checkCreatedCourierSuccessful() {
         Courier courier = courierGenerator.getRandomCourier();
 
-        ValidatableResponse createClientResponse = client.create(courier);
+        ValidatableResponse createClientResponse = client.createCourier(courier);
         checks.createdSuccessful(createClientResponse);
     }
 
     @Test
     @DisplayName("Failed create duplicate courier")
     public void checkThatImpossibleDuplicateCourier() {
-        ValidatableResponse logInClientResponse = client.create(tempCourier);
+        ValidatableResponse logInClientResponse = client.createCourier(tempCourier);
         checks.createdFailedConflict(logInClientResponse);
     }
 
@@ -55,7 +53,7 @@ public class CourierTest {
         Courier courier = courierGenerator.getRandomCourier();
         courier.setLogin(null);
 
-        ValidatableResponse createClientResponse = client.create(courier);
+        ValidatableResponse createClientResponse = client.createCourier(courier);
         checks.createdFailedBadRequest(createClientResponse);
     }
 
@@ -65,7 +63,7 @@ public class CourierTest {
         Courier courier = courierGenerator.getRandomCourier();
         courier.setPassword(null);
 
-        ValidatableResponse createClientResponse = client.create(courier);
+        ValidatableResponse createClientResponse = client.createCourier(courier);
         checks.createdFailedBadRequest(createClientResponse);
     }
 
@@ -75,7 +73,7 @@ public class CourierTest {
         Courier courier = courierGenerator.getRandomCourier();
         courier.setFirstName(null);
 
-        ValidatableResponse createClientResponse = client.create(courier);
+        ValidatableResponse createClientResponse = client.createCourier(courier);
         checks.createdFailedBadRequest(createClientResponse);
     }
 
@@ -119,7 +117,7 @@ public class CourierTest {
     @DisplayName("Successful delete of courier")
     public void deleteCourierSuccessful() {
         Courier courier = courierGenerator.getRandomCourier();
-        client.create(courier);
+        client.createCourier(courier);
         ValidatableResponse response = client.logIn(Credentials.from(courier));
         int id = checks.getCourierId(response);
 

@@ -1,5 +1,6 @@
 package steps;
 
+import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -8,6 +9,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 public class CourierAssertions {
+    @Step
     public void createdSuccessful(ValidatableResponse response){
         response
                 .assertThat()
@@ -15,6 +17,7 @@ public class CourierAssertions {
                 .body("ok", is(true));
     }
 
+    @Step
     public void loggedInSuccessful(ValidatableResponse response){
         response
                 .assertThat()
@@ -22,6 +25,7 @@ public class CourierAssertions {
                 .body("id", greaterThan(0));
     }
 
+    @Step
     public int getCourierId(ValidatableResponse response){
         return response
                 .body("id", notNullValue())
@@ -29,6 +33,7 @@ public class CourierAssertions {
                 .path("id");
     }
 
+    @Step
     public void createdFailedConflict(ValidatableResponse response){
         response
                 .assertThat()
@@ -36,6 +41,7 @@ public class CourierAssertions {
                 .body("message", notNullValue());
     }
 
+    @Step
     public void createdFailedBadRequest(ValidatableResponse response){
         response
                 .assertThat()
@@ -43,6 +49,7 @@ public class CourierAssertions {
                 .body("message", notNullValue());
     }
 
+    @Step
     public void deleteSuccessful(ValidatableResponse response){
         response
                 .assertThat()
@@ -50,6 +57,7 @@ public class CourierAssertions {
                 .body("ok", equalTo(true));
     }
 
+    @Step
     public void deleteFailedBadRequest(ValidatableResponse response){
         response
                 .assertThat()
@@ -57,6 +65,7 @@ public class CourierAssertions {
                 .body("message", notNullValue());
     }
 
+    @Step
     public void deleteFailedNotFound(ValidatableResponse response){
         response
                 .assertThat()
@@ -64,6 +73,7 @@ public class CourierAssertions {
                 .body("message", notNullValue());
     }
 
+    @Step
     public void loggedInFailedBadRequest(ValidatableResponse response){
         response
                 .assertThat()
@@ -71,6 +81,7 @@ public class CourierAssertions {
                 .body("message", notNullValue());
     }
 
+    @Step
     public void loggedInFailedNotFound(ValidatableResponse response){
         response
                 .assertThat()

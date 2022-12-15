@@ -1,29 +1,27 @@
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import json.*;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import steps.CourierAssertions;
 import steps.CourierClient;
 import steps.OrderAssertions;
 import steps.OrderClient;
 
 public class OrdersTest {
-    private static OrderClient orderClient = new OrderClient();
-    private static CourierClient courierClient = new CourierClient();
-    private static OrderAssertions orderCheck = new OrderAssertions();
-    private static CourierAssertions courierCheck = new CourierAssertions();
-    private static CourierGenerator courierGenerator = new CourierGenerator();
-    private static int tempCourierId;
-    private static int tempOrderId;
-    private static Courier tempCourier;
-    private static Order order;
+    private OrderClient orderClient = new OrderClient();
+    private CourierClient courierClient = new CourierClient();
+    private OrderAssertions orderCheck = new OrderAssertions();
+    private CourierAssertions courierCheck = new CourierAssertions();
+    private CourierGenerator courierGenerator = new CourierGenerator();
+    private int tempCourierId;
+    private int tempOrderId;
+    private Courier tempCourier;
+    private Order order;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         tempCourier = courierGenerator.getRandomCourier();
-        courierClient.create(tempCourier);
+        courierClient.createCourier(tempCourier);
         ValidatableResponse response = courierClient.logIn(Credentials.from(tempCourier));
         tempCourierId = courierCheck.getCourierId(response);
 
@@ -33,8 +31,8 @@ public class OrdersTest {
         tempOrderId = orderCheck.getId(response);
     }
 
-    @AfterClass
-    public static void tearDown() {
+    @After
+    public void tearDown() {
         if (tempCourierId == 0) {
             courierClient.delete(tempCourierId);
         }

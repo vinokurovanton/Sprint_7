@@ -1,5 +1,6 @@
 package steps;
 
+import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import json.Courier;
@@ -9,7 +10,8 @@ import static data.TestData.*;
 import static io.restassured.RestAssured.given;
 
 public class CourierClient {
-    public ValidatableResponse create(Courier courier) {
+    @Step
+    public ValidatableResponse createCourier(Courier courier) {
         return given().log().all()
                 .baseUri(BASE_URI)
                 .contentType(ContentType.JSON)
@@ -20,6 +22,7 @@ public class CourierClient {
                 .then();
     }
 
+    @Step
     public ValidatableResponse logIn(Credentials credentials) {
         return given().log().all()
                 .baseUri(BASE_URI)
@@ -31,6 +34,7 @@ public class CourierClient {
                 .then();
     }
 
+    @Step
     public ValidatableResponse delete(int id) {
         return given().log().all()
                 .baseUri(BASE_URI)
@@ -41,6 +45,7 @@ public class CourierClient {
                 .then();
     }
 
+    @Step
     public ValidatableResponse delete() {
         return given().log().all()
                 .baseUri(BASE_URI)
